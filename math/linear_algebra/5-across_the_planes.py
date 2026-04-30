@@ -6,7 +6,7 @@ def add_matrices2D(mat1, mat2):
     """Adds two 2D matrices and returns a new matrix"""
     if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
         return None
-    
+
     new_matrix = []
     for i in range(len(mat1)):
         row = []
