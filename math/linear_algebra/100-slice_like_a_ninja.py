@@ -2,19 +2,21 @@
 """
 Slices a matrix along specific axes
 """
-import numpy as np
 
 
 def np_slice(matrix, axes={}):
     """
     Slices a matrix along specific axes
     """
-    # Matrisin ölçüləri qədər bütün elementləri (:) əhatə edən slice siyahısı
+    # Qlobal import qadağan olduğu üçün daxili çağırırıq
+    import numpy as np
+
+    # Bütün ölçülər üçün tam slice (:) yaradırıq
     slc = [slice(None)] * len(matrix.shape)
 
-    # Verilən oxları (axis) və onların slice parametrlərini tətbiq edirik
+    # Verilmiş oxlar üzrə slice-ları yerləşdiririk
     for axis, params in axes.items():
         slc[axis] = slice(*params)
 
-    # Tuple formatına çevirib matrisi dilimləyirik
+    # Nəticəni yeni numpy.ndarray kimi qaytarırıq
     return matrix[tuple(slc)]
