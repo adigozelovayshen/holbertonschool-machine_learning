@@ -32,7 +32,6 @@ def inverse(matrix):
     if n == 0 or not all(len(row) == n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # Determinant hesablanır
     det = determinant(matrix)
     if det == 0:
         return None
@@ -40,14 +39,13 @@ def inverse(matrix):
     if n == 1:
         return [[1 / matrix[0][0]]]
 
-    # 1. Kofaktor matrisi və Transponir (Adjugate)
     adj = []
     for j in range(n):
         adj_row = []
         for i in range(n):
-            sub_matrix = [row[:j] + row[j + 1:] for row in (matrix[:i] +
-                          matrix[i + 1:])]
-            # Kofaktorun transponiri birbaşa burada hesablanır (i və j yerini dəyişərək)
+            # Sətiri parçalayaraq 79 simvol limitini aşmırıq
+            rows = matrix[:i] + matrix[i + 1:]
+            sub_matrix = [row[:j] + row[j + 1:] for row in rows]
             cofactor = ((-1) ** (i + j)) * determinant(sub_matrix)
             adj_row.append(cofactor / det)
         adj.append(adj_row)
