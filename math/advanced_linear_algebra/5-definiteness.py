@@ -15,7 +15,6 @@ def definiteness(matrix):
     if len(matrix.shape) != 2 or matrix.shape[0] != matrix.shape[1]:
         return None
 
-    # Simmetrik olmayan matrislər üçün definiteness təyin olunmur
     if not np.allclose(matrix, matrix.T):
         return None
 
@@ -37,8 +36,7 @@ def definiteness(matrix):
         return "Positive semi-definite"
     if neg_semi:
         return "Negative semi-definite"
-    
-    # Həm müsbət həm mənfi xüsusi qiymətlər varsa
+
     if np.any(eigenvalues > 0) and np.any(eigenvalues < 0):
         return "Indefinite"
 
