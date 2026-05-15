@@ -33,12 +33,19 @@ class Normal:
         """Verilmiş x dəyəri üçün PDF dəyərini hesablayır"""
         pi = 3.1415926536
         e = 2.7182818285
-
-        # Düsturun hissələri:
-        # 1 / (stddev * sqrt(2 * pi))
         coefficient = 1 / (self.stddev * ((2 * pi) ** 0.5))
-
-        # -0.5 * ((x - mean) / stddev) ** 2
         exponent = -0.5 * (((x - self.mean) / self.stddev) ** 2)
-
         return coefficient * (e ** exponent)
+
+    def cdf(self, x):
+        """Verilmiş x dəyəri üçün CDF dəyərini hesablayır"""
+        pi = 3.1415926536
+        value = (x - self.mean) / (self.stddev * (2 ** 0.5))
+
+        # erf(x) yaxınlaşma düsturu
+        erf = (2 / (pi ** 0.5)) * (
+            value - (value ** 3) / 3 + (value ** 5) / 10 -
+            (value ** 7) / 42 + (value ** 9) / 216
+        )
+
+        return 0.5 * (1 + erf)
