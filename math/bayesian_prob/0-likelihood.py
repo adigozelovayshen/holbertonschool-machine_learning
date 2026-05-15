@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Bayesian ehtimalı - Likelihood hesablama modulu"""
 import numpy as np
-import math
 
 
 def likelihood(x, n, P):
@@ -20,14 +19,22 @@ def likelihood(x, n, P):
     if np.any((P < 0) | (P > 1)):
         raise ValueError("All values in P must be in the range [0, 1]")
 
-    # Kombinasiya (nCk) = n! / (x! * (n-x)!)
-    # Standart math modulundan istifadə edirik
-    fact_n = math.factorial(n)
-    fact_x = math.factorial(x)
-    fact_nx = math.factorial(n - x)
+    # Kombinasiyanı nCk = n! / (k!(n-k)!) hesablayırıq.
+    # Modulsuz faktorial hesabı:
+    def factorial(num):
+        res = 1
+        for i in range(1, num + 1):
+            res *= i
+        return res
+
+    fact_n = factorial(n)
+    fact_x = factorial(x)
+    fact_nx = factorial(n - x)
+
     combination = fact_n / (fact_x * fact_nx)
 
     # Likelihood = combination * (P^x) * ((1-P)^(n-x))
+    # Numpy vektorizasiyası sayəsində P-nin hər bir elementi üçün hesablanır
     lh = combination * (P ** x) * ((1 - P) ** (n - x))
 
     return lh
