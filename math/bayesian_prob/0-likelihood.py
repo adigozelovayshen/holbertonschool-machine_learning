@@ -11,7 +11,8 @@ def likelihood(x, n, P):
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
     if not isinstance(x, int) or x < 0:
-        raise ValueError("x must be an integer that is greater than or equal to 0")
+        err = "x must be an integer that is greater than or equal to 0"
+        raise ValueError(err)
     if x > n:
         raise ValueError("x cannot be greater than n")
     if not isinstance(P, np.ndarray) or len(P.shape) != 1:
@@ -20,7 +21,6 @@ def likelihood(x, n, P):
         raise ValueError("All values in P must be in the range [0, 1]")
 
     # Kombinasiyanı nCk = n! / (k!(n-k)!) hesablayırıq.
-    # Modulsuz faktorial hesabı:
     def factorial(num):
         res = 1
         for i in range(1, num + 1):
@@ -34,7 +34,6 @@ def likelihood(x, n, P):
     combination = fact_n / (fact_x * fact_nx)
 
     # Likelihood = combination * (P^x) * ((1-P)^(n-x))
-    # Numpy vektorizasiyası sayəsində P-nin hər bir elementi üçün hesablanır
     lh = combination * (P ** x) * ((1 - P) ** (n - x))
 
     return lh
