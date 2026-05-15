@@ -20,14 +20,37 @@ class Binomial:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
 
-            # Mean (mu) və Variance (sigma^2) hesabı
             mean = sum(data) / len(data)
             sum_diff_sq = sum([(x - mean) ** 2 for x in data])
             variance = sum_diff_sq / len(data)
 
-            # p = 1 - (variance / mean)
             p_initial = 1 - (variance / mean)
-            # n = round(mean / p)
             self.n = int(round(mean / p_initial))
-            # Yeni p = mean / n
             self.p = float(mean / self.n)
+
+    def pmf(self, k):
+        """Verilmiş k uğur sayı üçün PMF dəyərini hesablayır"""
+        if k < 0:
+            return 0
+
+        k = int(k)
+        if k > self.n:
+            return 0
+
+        # Faktorial funksiyası
+        def factorial(n):
+            res = 1
+            for i in range(1, n + 1):
+                res *= i
+            return res
+
+        # Kombinasiya (nCk) = n! / (k! * (n-k)!)
+        n_fact = factorial(self.n)
+        k_fact = factorial(k)
+        nk_fact = factorial(self.n - k)
+        combination = n_fact / (k_fact * nk_fact)
+
+        # PMF = combination * (p^k) * ((1-p)^(n-k))
+        pmf_val = combination * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+        return pmf_val
