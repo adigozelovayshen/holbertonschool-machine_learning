@@ -16,5 +16,14 @@ class Exponential:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            # lambtha = 1 / mean
             self.lambtha = float(len(data) / sum(data))
+
+    def pdf(self, x):
+        """Verilmiş x zaman kəsiyi üçün PDF dəyərini hesablayır"""
+        if x < 0:
+            return 0
+
+        e = 2.7182818285
+        # f(x) = lambtha * e^(-lambtha * x)
+        pdf_val = self.lambtha * (e ** (-self.lambtha * x))
+        return pdf_val
