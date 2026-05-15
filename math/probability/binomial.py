@@ -32,25 +32,33 @@ class Binomial:
         """Verilmiş k uğur sayı üçün PMF dəyərini hesablayır"""
         if k < 0:
             return 0
-
         k = int(k)
         if k > self.n:
             return 0
 
-        # Faktorial funksiyası
         def factorial(n):
             res = 1
             for i in range(1, n + 1):
                 res *= i
             return res
 
-        # Kombinasiya (nCk) = n! / (k! * (n-k)!)
         n_fact = factorial(self.n)
         k_fact = factorial(k)
         nk_fact = factorial(self.n - k)
         combination = n_fact / (k_fact * nk_fact)
 
-        # PMF = combination * (p^k) * ((1-p)^(n-k))
         pmf_val = combination * (self.p ** k) * ((1 - self.p) ** (self.n - k))
-
         return pmf_val
+
+    def cdf(self, k):
+        """Verilmiş k uğur sayı üçün CDF dəyərini hesablayır"""
+        if k < 0:
+            return 0
+        k = int(k)
+        if k > self.n:
+            k = self.n
+
+        cdf_val = 0
+        for i in range(k + 1):
+            cdf_val += self.pmf(i)
+        return cdf_val
