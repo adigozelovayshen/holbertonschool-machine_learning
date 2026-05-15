@@ -22,15 +22,20 @@ class Poisson:
         """Verilmiş k uğur sayı üçün PMF dəyərini hesablayır"""
         if k < 0:
             return 0
-
         k = int(k)
         e = 2.7182818285
-
-        # Faktorial hesablama
         factorial = 1
         for i in range(1, k + 1):
             factorial *= i
-
-        # PMF düsturu: (e^-lambda * lambda^k) / k!
         pmf_val = (e ** -self.lambtha * self.lambtha ** k) / factorial
         return pmf_val
+
+    def cdf(self, k):
+        """Verilmiş k uğur sayı üçün CDF dəyərini hesablayır"""
+        if k < 0:
+            return 0
+        k = int(k)
+        cdf_val = 0
+        for i in range(k + 1):
+            cdf_val += self.pmf(i)
+        return cdf_val
