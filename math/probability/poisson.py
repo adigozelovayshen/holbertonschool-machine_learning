@@ -22,15 +22,15 @@ class Poisson:
         """Verilmiş k uğur sayı üçün PMF dəyərini hesablayır"""
         if k < 0:
             return 0
-        
+
         k = int(k)
         e = 2.7182818285
-        
+
         # Faktorial hesablama
         factorial = 1
         for i in range(1, k + 1):
             factorial *= i
-            
+
         # PMF düsturu: (e^-lambda * lambda^k) / k!
         pmf_val = (e ** -self.lambtha * self.lambtha ** k) / factorial
         return pmf_val
