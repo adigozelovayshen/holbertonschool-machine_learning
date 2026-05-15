@@ -22,8 +22,15 @@ class Exponential:
         """Verilmiş x zaman kəsiyi üçün PDF dəyərini hesablayır"""
         if x < 0:
             return 0
-
         e = 2.7182818285
-        # f(x) = lambtha * e^(-lambtha * x)
         pdf_val = self.lambtha * (e ** (-self.lambtha * x))
         return pdf_val
+
+    def cdf(self, x):
+        """Verilmiş x zaman kəsiyi üçün CDF dəyərini hesablayır"""
+        if x < 0:
+            return 0
+        e = 2.7182818285
+        # F(x) = 1 - e^(-lambtha * x)
+        cdf_val = 1 - (e ** (-self.lambtha * x))
+        return cdf_val
