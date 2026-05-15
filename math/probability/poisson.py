@@ -6,7 +6,9 @@ class Poisson:
     """Poisson paylanmasını təmsil edən sinif"""
 
     def __init__(self, data=None, lambtha=1.):
-        """Sinif konstruktoru"""
+        """
+        Sinif konstruktoru
+        """
         if data is None:
             if lambtha <= 0:
                 raise ValueError("lambtha must be a positive value")
@@ -16,5 +18,24 @@ class Poisson:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            
+
             self.lambtha = float(sum(data) / len(data))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
