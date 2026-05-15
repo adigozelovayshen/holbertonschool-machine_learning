@@ -20,22 +20,3 @@ class Poisson:
                 raise ValueError("data must contain multiple values")
 
             self.lambtha = float(sum(data) / len(data))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
