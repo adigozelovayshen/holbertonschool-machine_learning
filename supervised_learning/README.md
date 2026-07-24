@@ -1,1 +1,1 @@
-# CNN Projects
+# Supervised Learning
