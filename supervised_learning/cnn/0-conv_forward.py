@@ -7,7 +7,7 @@ import numpy as np
 
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """
-    Performs forward propagation over a convolutional layer of a neural network
+    Performs forward propagation over a convolutional layer
 
     Parameters:
     - A_prev: numpy.ndarray of shape (m, h_prev, w_prev, c_prev)
@@ -18,7 +18,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     - stride: tuple of (sh, sw)
 
     Returns:
-    - The output of the convolutional layer
+    - Output of the convolutional layer
     """
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, _, c_new = W.shape
