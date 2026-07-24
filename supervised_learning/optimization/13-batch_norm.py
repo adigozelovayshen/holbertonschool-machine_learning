@@ -4,7 +4,7 @@ import numpy as np
 
 
 def batch_norm(Z, gamma, beta, epsilon):
-    """Normalizes an unactivated output of a neural network using batch norm"""
+    """Normalizes unactivated output using batch norm"""
     mean = np.mean(Z, axis=0)
     variance = np.var(Z, axis=0)
     Z_norm = (Z - mean) / np.sqrt(variance + epsilon)

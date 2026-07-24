@@ -3,7 +3,7 @@
 
 
 def moving_average(data, beta):
-    """Calculates the exponentially weighted moving average of a data set"""
+    """Calculates exponentially weighted moving average"""
     v = 0
     v_list = []
     for i, x in enumerate(data):
