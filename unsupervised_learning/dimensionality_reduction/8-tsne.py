@@ -43,11 +43,11 @@ def tsne(X, ndims=2, idims=50, perplexity=30.0, iterations=1000, lr=500):
         Y = Y + iY
         Y = Y - np.mean(Y, axis=0)
 
-        if step == 100:
-            P = P / 4
-
         if step % 100 == 0:
             C = cost(P, Q)
             print("Cost at iteration {}: {}".format(step, C))
+
+        if step == 100:
+            P = P / 4
 
     return Y
