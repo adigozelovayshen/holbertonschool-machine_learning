@@ -22,12 +22,6 @@ class NST:
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
         """
         Constructor for NST class.
-
-        Parameters:
-            style_image (np.ndarray): Image used as a style reference.
-            content_image (np.ndarray): Image used as a content reference.
-            alpha (float/int): Weight for content cost.
-            beta (float/int): Weight for style cost.
         """
         if (not isinstance(style_image, np.ndarray) or
                 len(style_image.shape) != 3 or style_image.shape[2] != 3):
@@ -55,14 +49,7 @@ class NST:
     @staticmethod
     def scale_image(image):
         """
-        Rescales an image such that its pixel values are between 0 and 1
-        and its largest side is 512 pixels.
-
-        Parameters:
-            image (np.ndarray): Image to be scaled of shape (h, w, 3).
-
-        Returns:
-            tf.Tensor: Scaled image of shape (1, h_new, w_new, 3).
+        Rescales image to [0, 1] range with max side 512.
         """
         if (not isinstance(image, np.ndarray) or
                 len(image.shape) != 3 or image.shape[2] != 3):

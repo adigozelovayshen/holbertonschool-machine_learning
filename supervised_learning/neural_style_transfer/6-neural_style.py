@@ -22,12 +22,6 @@ class NST:
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
         """
         Constructor for NST class.
-
-        Parameters:
-            style_image (np.ndarray): Image used as a style reference.
-            content_image (np.ndarray): Image used as a content reference.
-            alpha (float/int): Weight for content cost.
-            beta (float/int): Weight for style cost.
         """
         if (not isinstance(style_image, np.ndarray) or
                 len(style_image.shape) != 3 or style_image.shape[2] != 3):
@@ -57,14 +51,7 @@ class NST:
     @staticmethod
     def scale_image(image):
         """
-        Rescales an image such that its pixel values are between 0 and 1
-        and its largest side is 512 pixels.
-
-        Parameters:
-            image (np.ndarray): Image to be scaled of shape (h, w, 3).
-
-        Returns:
-            tf.Tensor: Scaled image of shape (1, h_new, w_new, 3).
+        Rescales an image such that its pixel values are between 0 and 1.
         """
         if (not isinstance(image, np.ndarray) or
                 len(image.shape) != 3 or image.shape[2] != 3):
@@ -92,9 +79,7 @@ class NST:
 
     def load_model(self):
         """
-        Creates the model used to calculate cost using VGG19 as a base.
-        Replaces MaxPooling2D layers with AveragePooling2D layers.
-        Sets model outputs to style layers followed by content layer.
+        Creates VGG19 model with AveragePooling layers.
         """
         vgg = tf.keras.applications.VGG19(
             include_top=False,
@@ -127,12 +112,6 @@ class NST:
     def gram_matrix(input_layer):
         """
         Calculates the gram matrix of an input layer tensor.
-
-        Parameters:
-            input_layer (tf.Tensor|tf.Variable): Tensor of shape (1, h, w, c).
-
-        Returns:
-            tf.Tensor: Gram matrix of shape (1, c, c).
         """
         if (not isinstance(input_layer, (tf.Tensor, tf.Variable)) or
                 len(input_layer.shape) != 4):
@@ -148,11 +127,7 @@ class NST:
 
     def generate_features(self):
         """
-        Extracts the features used to calculate neural style cost.
-
-        Sets instance attributes:
-            gram_style_features: list of gram matrices for style layer outputs
-            content_feature: content layer output of content image
+        Extracts features used to calculate neural style cost.
         """
         style_preprocessed = tf.keras.applications.vgg19.preprocess_input(
             self.style_image * 255.0
@@ -172,14 +147,7 @@ class NST:
 
     def layer_style_cost(self, style_output, gram_target):
         """
-        Calculates the style cost for a single layer.
-
-        Parameters:
-            style_output (tf.Tensor|tf.Variable): shape (1, h, w, c)
-            gram_target (tf.Tensor|tf.Variable): shape (1, c, c)
-
-        Returns:
-            tf.Tensor: layer's style cost
+        Calculates style cost for a single layer.
         """
         if (not isinstance(style_output, (tf.Tensor, tf.Variable)) or
                 len(style_output.shape) != 4):
@@ -197,13 +165,7 @@ class NST:
 
     def style_cost(self, style_outputs):
         """
-        Calculates the style cost for generated image across all style layers.
-
-        Parameters:
-            style_outputs (list): list of tf.Tensor style outputs
-
-        Returns:
-            tf.Tensor: total style cost
+        Calculates style cost across all style layers.
         """
         len_style = len(self.style_layers)
         if (not isinstance(style_outputs, list) or
@@ -226,14 +188,7 @@ class NST:
 
     def content_cost(self, content_output):
         """
-        Calculates the content cost for the generated image.
-
-        Parameters:
-            content_output (tf.Tensor|tf.Variable): content layer output for
-                the generated image
-
-        Returns:
-            tf.Tensor: content cost
+        Calculates content cost for generated image.
         """
         s = self.content_feature.shape
         if (not isinstance(content_output, (tf.Tensor, tf.Variable)) or
