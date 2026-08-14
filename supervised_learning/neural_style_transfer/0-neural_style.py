@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Neural Style Transfer module
+Neural Style Transfer module (Task 0)
 """
 import numpy as np
 import tensorflow as tf
@@ -35,10 +35,12 @@ class NST:
                 "content_image must be a numpy.ndarray with shape (h, w, 3)"
             )
 
-        if not isinstance(alpha, (int, float)) or alpha < 0:
+        if (not isinstance(alpha, (int, float, np.number)) or
+                isinstance(alpha, bool) or alpha < 0):
             raise TypeError("alpha must be a non-negative number")
 
-        if not isinstance(beta, (int, float)) or beta < 0:
+        if (not isinstance(beta, (int, float, np.number)) or
+                isinstance(beta, bool) or beta < 0):
             raise TypeError("beta must be a non-negative number")
 
         self.style_image = self.scale_image(style_image)
@@ -49,7 +51,7 @@ class NST:
     @staticmethod
     def scale_image(image):
         """
-        Rescales image to [0, 1] range with max side 512.
+        Rescales an image such that its pixel values are between 0 and 1.
         """
         if (not isinstance(image, np.ndarray) or
                 len(image.shape) != 3 or image.shape[2] != 3):
