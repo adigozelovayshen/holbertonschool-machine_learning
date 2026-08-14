@@ -16,11 +16,11 @@ class Yolo:
 
         Parameters:
             model_path (str): Path to where a Darknet Keras model is stored.
-            classes_path (str): Path to where the list of class names is stored.
+            classes_path (str): Path to file with class names.
             class_t (float): Box score threshold for initial filtering step.
             nms_t (float): IOU threshold for non-max suppression.
             anchors (numpy.ndarray): Array of shape (outputs, anchor_boxes, 2)
-                                     containing all anchor box dimensions.
+                                     containing anchor box dimensions.
         """
         self.model = K.models.load_model(model_path)
         with open(classes_path, 'r') as f:
