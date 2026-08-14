@@ -206,7 +206,8 @@ class NST:
             tf.Tensor: total style cost
         """
         len_style = len(self.style_layers)
-        if not isinstance(style_outputs, list) or len(style_outputs) != len_style:
+        if (not isinstance(style_outputs, list) or
+                len(style_outputs) != len_style):
             raise TypeError(
                 f"style_outputs must be a list with a length of {len_style}"
             )
