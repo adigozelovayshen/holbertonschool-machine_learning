@@ -205,16 +205,16 @@ class NST:
         Returns:
             tf.Tensor: total style cost
         """
-        l = len(self.style_layers)
-        if not isinstance(style_outputs, list) or len(style_outputs) != l:
+        len_style = len(self.style_layers)
+        if not isinstance(style_outputs, list) or len(style_outputs) != len_style:
             raise TypeError(
-                f"style_outputs must be a list with a length of {l}"
+                f"style_outputs must be a list with a length of {len_style}"
             )
 
-        weight = 1.0 / l
+        weight = 1.0 / len_style
         style_cost = 0.0
 
-        for i in range(l):
+        for i in range(len_style):
             layer_cost = self.layer_style_cost(
                 style_outputs[i],
                 self.gram_style_features[i]
