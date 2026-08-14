@@ -1,4 +1,3 @@
-#!/usr/init/env python3
 #!/usr/bin/env python3
 """
 Neural Style Transfer module with Total Cost Calculation
