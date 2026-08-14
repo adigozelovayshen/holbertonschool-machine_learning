@@ -24,24 +24,32 @@ class NST:
         Constructor for NST class.
         """
         if (not isinstance(style_image, np.ndarray) or
-                len(style_image.shape) != 3 or style_image.shape[2] != 3):
+                len(style_image.shape) != 3 or
+                style_image.shape[2] != 3):
             raise TypeError(
-                "style_image must be a numpy.ndarray with shape (h, w, 3)"
+                "style_image must be a numpy.ndarray "
+                "with shape (h, w, 3)"
             )
 
         if (not isinstance(content_image, np.ndarray) or
-                len(content_image.shape) != 3 or content_image.shape[2] != 3):
+                len(content_image.shape) != 3 or
+                content_image.shape[2] != 3):
             raise TypeError(
-                "content_image must be a numpy.ndarray with shape (h, w, 3)"
+                "content_image must be a numpy.ndarray "
+                "with shape (h, w, 3)"
             )
 
         if (not isinstance(alpha, (int, float, np.number)) or
                 isinstance(alpha, bool) or alpha < 0):
-            raise TypeError("alpha must be a non-negative number")
+            raise TypeError(
+                "alpha must be a non-negative number"
+            )
 
         if (not isinstance(beta, (int, float, np.number)) or
                 isinstance(beta, bool) or beta < 0):
-            raise TypeError("beta must be a non-negative number")
+            raise TypeError(
+                "beta must be a non-negative number"
+            )
 
         self.style_image = self.scale_image(style_image)
         self.content_image = self.scale_image(content_image)
@@ -51,12 +59,15 @@ class NST:
     @staticmethod
     def scale_image(image):
         """
-        Rescales an image such that its pixel values are between 0 and 1.
+        Rescales an image such that its
+        pixel values are between 0 and 1.
         """
         if (not isinstance(image, np.ndarray) or
-                len(image.shape) != 3 or image.shape[2] != 3):
+                len(image.shape) != 3 or
+                image.shape[2] != 3):
             raise TypeError(
-                "image must be a numpy.ndarray with shape (h, w, 3)"
+                "image must be a numpy.ndarray "
+                "with shape (h, w, 3)"
             )
 
         h, w, _ = image.shape
