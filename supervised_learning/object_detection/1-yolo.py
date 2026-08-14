@@ -47,11 +47,11 @@ class Yolo:
         image_height, image_width = image_size[0], image_size[1]
 
         try:
-            input_height = self.model.input.shape[1]
-            input_width = self.model.input.shape[2]
+            input_width = self.model.input.shape[1]
+            input_height = self.model.input.shape[2]
         except AttributeError:
-            input_height = self.model.input[0].shape[1]
-            input_width = self.model.input[0].shape[2]
+            input_width = self.model.input[0].shape[1]
+            input_height = self.model.input[0].shape[2]
 
         for i, output in enumerate(outputs):
             grid_height, grid_width, anchor_boxes, _ = output.shape
