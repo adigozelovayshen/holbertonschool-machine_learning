@@ -38,7 +38,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
             X, k, iterations, tol, verbose
         )
         if pi is None:
-            return None, None, None, None
+            continue
 
         p = (k - 1) + (k * d) + int(k * d * (d + 1) / 2)
         bic = p * np.log(n) - 2 * ll
@@ -47,8 +47,13 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         log_likelihoods.append(ll)
         bics.append(bic)
 
+    if not bics:
+        return None, None, None, None
+
+    bics = np.array(bics)
+    log_likelihoods = np.array(log_likelihoods)
     best_idx = np.argmin(bics)
     best_k = ks[best_idx]
     best_result = results[best_idx]
 
-    return best_k, best_result, np.array(log_likelihoods), np.array(bics)
+    return best_k, best_result, log_likelihoods, bics
