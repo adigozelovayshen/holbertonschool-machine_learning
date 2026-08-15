@@ -248,7 +248,7 @@ class NST:
         return gradients, J_total, J_content, J_style
 
     def generate_image(self, iterations=1000, step=None, lr=0.01,
-                        beta1=0.9, beta2=0.99):
+                       beta1=0.9, beta2=0.99):
         """
         Generates the neural style transferred image.
         """
