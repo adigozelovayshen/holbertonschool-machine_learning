@@ -26,6 +26,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         return None, None, None, None, None
 
     l_prev = 0
+    ll = 0
+    g = None
     for i in range(iterations + 1):
         g, ll = expectation(X, pi, m, S)
         if g is None:

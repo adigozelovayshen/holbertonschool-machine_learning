@@ -25,10 +25,10 @@ def expectation(X, pi, m, S):
 
     P = np.zeros((k, n))
     for i in range(k):
-        P[i] = pdf(X, m[i], S[i])
-        if P[i] is None:
+        res = pdf(X, m[i], S[i])
+        if res is None:
             return None, None
-        P[i] *= pi[i]
+        P[i] = res * pi[i]
 
     sum_P = np.sum(P, axis=0)
     if np.any(sum_P == 0):
