@@ -47,22 +47,14 @@ def expectation_maximization(X, k, iterations=1000,
 
     S = np.tile(np.eye(d), (k, 1, 1))
 
-    prev_log_l = 0
-    log_l = 0
+    prev_log_l = None
 
     for i in range(iterations):
-        # Expectation step
         pdf = np.zeros((n, k))
 
         for j in range(k):
-            try:
-                det = np.linalg.det(S[j])
-                inv = np.linalg.inv(S[j])
-            except np.linalg.LinAlgError:
-                return None, None, None, None, None
-
-            if det <= 0:
-                return None, None, None, None, None
+            det = np.linalg.det(S[j])
+            inv = np.linalg.inv(S[j])
 
             diff = X - m[j]
             exponent = -0.5 * np.sum(
@@ -76,9 +68,11 @@ def expectation_maximization(X, k, iterations=1000,
                 / np.sqrt((2 * np.pi) ** d * det)
             )
 
-        g = pdf / np.sum(pdf, axis=1, keepdims=True)
+        total = np.sum(pdf, axis=1)
+        total = np.maximum(total, 1e-300)
 
-        # Maximization step
+        g = pdf / total[:, np.newaxis]
+
         Nk = np.sum(g, axis=0)
 
         pi = Nk / n
@@ -91,12 +85,6 @@ def expectation_maximization(X, k, iterations=1000,
                 / Nk[j]
             )
 
-        # Log likelihood
-        total = np.sum(pdf, axis=1)
-
-        if np.any(total <= 0):
-            return None, None, None, None, None
-
         log_l = np.sum(np.log(total))
 
         if verbose and (i == 0 or i % 10 == 0):
@@ -106,15 +94,15 @@ def expectation_maximization(X, k, iterations=1000,
                 )
             )
 
-        # Convergence
-        if i > 0 and abs(log_l - prev_log_l) <= tol:
-            if verbose and i % 10 != 0:
-                print(
-                    "Log Likelihood after {} iterations: {}".format(
-                        i, log_l
+        if prev_log_l is not None:
+            if abs(log_l - prev_log_l) <= tol:
+                if verbose and i % 10 != 0:
+                    print(
+                        "Log Likelihood after {} iterations: {}".format(
+                            i, log_l
+                        )
                     )
-                )
-            return pi, m, S, g, log_l
+                return pi, m, S, g, log_l
 
         prev_log_l = log_l
 
