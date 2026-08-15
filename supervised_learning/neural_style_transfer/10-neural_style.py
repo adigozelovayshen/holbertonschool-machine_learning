@@ -216,15 +216,13 @@ class NST:
         """
         Calculates the variational cost for the generated image.
         """
-        a = tf.square(
-            generated_image[:, :-1, :-1, :] -
-            generated_image[:, 1:, :-1, :]
-        )
-        b = tf.square(
-            generated_image[:, :-1, :-1, :] -
-            generated_image[:, :-1, 1:, :]
-        )
-        return tf.reduce_sum(tf.pow(a + b, 1.25))
+        if (not isinstance(generated_image, (tf.Tensor, tf.Variable)) or
+                len(generated_image.shape) != 4):
+            raise TypeError(
+                "generated_image must be a tensor of shape (1, nh, nw, 3)"
+            )
+
+        return tf.reduce_sum(tf.image.total_variation(generated_image))
 
     def total_cost(self, generated_image):
         """
