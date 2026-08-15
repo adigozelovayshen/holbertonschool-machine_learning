@@ -11,7 +11,7 @@ def expectation(X, pi, m, S):
     - pi: numpy.ndarray of shape (k,)
     - m: numpy.ndarray of shape (k, d)
     - S: numpy.ndarray of shape (k, d, d)
-    Returns: g, l, or None, None on failure
+    Returns: g, log_likelihood, or None, None on failure
     """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None
@@ -39,7 +39,7 @@ def expectation(X, pi, m, S):
         g[i] = pi[i] * p
 
     total_likelihood = np.sum(g, axis=0)
-    l = np.sum(np.log(total_likelihood))
+    log_likelihood = np.sum(np.log(total_likelihood))
     g /= total_likelihood
 
-    return g, l
+    return g, log_likelihood
