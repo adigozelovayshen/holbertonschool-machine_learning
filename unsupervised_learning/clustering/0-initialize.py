@@ -10,8 +10,8 @@ def initialize(X, k):
     Initializes cluster centroids for K-means.
     - X: numpy.ndarray of shape (n, d) containing the dataset
     - k: positive integer containing the number of clusters
-    Returns: numpy.ndarray of shape (k, d) containing initialized centroids,
-             or None on failure.
+    Returns: numpy.ndarray of shape (k, d) containing
+             initialized centroids, or None on failure.
     """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None
@@ -24,7 +24,7 @@ def initialize(X, k):
     low = np.min(X, axis=0)
     high = np.max(X, axis=0)
 
-    # Initialize centroids using uniform distribution exactly once without loops
+    # Initialize centroids using uniform distribution
     centroids = np.random.uniform(low, high, size=(k, d))
 
     return centroids
