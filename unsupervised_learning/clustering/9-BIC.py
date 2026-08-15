@@ -44,6 +44,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     l = np.array(l_list)
     b = np.array(b_list)
+
     best_index = np.argmin(b)
     best_k = ks[best_index]
     best_result = results[best_index]
