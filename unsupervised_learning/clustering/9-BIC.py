@@ -22,7 +22,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     n, d = X.shape
     if kmax is None:
         kmax = n
-    if kmin > kmax or kmin > n:
+    if kmin > kmax or kmin > n or kmax > n:
         return None, None, None, None
 
     results, l_list, b_list = [], [], []
