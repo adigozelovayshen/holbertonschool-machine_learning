@@ -7,7 +7,9 @@ maximization = __import__('8-maximization').maximization
 
 
 def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
-    """Performs expectation maximization for a GMM."""
+    """
+    Performs expectation maximization for a GMM.
+    """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None, None
     if not isinstance(k, int) or k <= 0:
@@ -20,19 +22,26 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         return None, None, None, None, None
 
     pi, m, S = initialize(X, k)
-    l_prev = 0
+    if pi is None:
+        return None, None, None, None, None
 
+    l_prev = 0
     for i in range(iterations + 1):
         g, ll = expectation(X, pi, m, S)
+        if g is None:
+            return None, None, None, None, None
+
         if verbose and i % 10 == 0:
             print(f"Log Likelihood after {i} iterations: {ll}")
-        
+
         if abs(ll - l_prev) <= tol and i > 0:
             break
-        
+
         l_prev = ll
         if i < iterations:
             pi, m, S = maximization(X, g)
+            if pi is None:
+                return None, None, None, None, None
 
     if verbose:
         print(f"Log Likelihood after {i} iterations: {ll}")
