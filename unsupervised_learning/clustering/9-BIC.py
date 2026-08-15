@@ -40,6 +40,10 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         if pi is None:
             return None, None, None, None
 
+        # p = number of parameters
+        # mixing probabilities: k - 1
+        # means: k * d
+        # covariances: k * d * (d + 1) / 2
         p = (k - 1) + (k * d) + int(k * d * (d + 1) / 2)
         bic = p * np.log(n) - 2 * ll
 
