@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""Module that finds best number of clusters for GMM using BIC."""
+"""
+Module that finds the best number of clusters
+for a GMM using the Bayesian Information Criterion.
+"""
 import numpy as np
-EM = __import__('8-EM').expectation_maximization
+expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000,
         tol=1e-5, verbose=False):
-    """Finds best number of clusters for GMM using BIC."""
+    """
+    Finds the best number of clusters for a GMM using BIC.
+    """
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
     if not isinstance(kmin, int) or kmin <= 0:
         return None, None, None, None
-    if kmax is not None and (
-        not isinstance(kmax, int) or kmax <= 0
-    ):
+    if kmax is not None and (not isinstance(kmax, int) or kmax <= 0):
         return None, None, None, None
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None, None, None
@@ -28,11 +31,13 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
     if kmin > kmax or kmin > n or kmax > n:
         return None, None, None, None
 
-    results, l_list, b_list = [], [], []
+    results = []
+    l_list = []
+    b_list = []
     ks = range(kmin, kmax + 1)
 
     for k in ks:
-        pi, m, S, g, log_l = EM(
+        pi, m, S, g, log_l = expectation_maximization(
             X, k, iterations, tol, verbose
         )
         if pi is None:
