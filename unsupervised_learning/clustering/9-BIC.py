@@ -15,15 +15,22 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
     """
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
+
     if not isinstance(kmin, int) or kmin <= 0:
         return None, None, None, None
-    if kmax is not None and (
-            not isinstance(kmax, int) or kmax <= 0):
+
+    if kmax is not None and not isinstance(kmax, int):
         return None, None, None, None
+
+    if kmax is not None and kmax <= 0:
+        return None, None, None, None
+
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None, None, None
+
     if not isinstance(tol, (int, float)) or tol < 0:
         return None, None, None, None
+
     if not isinstance(verbose, bool):
         return None, None, None, None
 
@@ -50,8 +57,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
         if pi is None:
             return None, None, None, None
 
-        p = ((k - 1) + (k * d)
-             + int(k * d * (d + 1) / 2))
+        p = (k - 1) + (k * d) + int(k * d * (d + 1) / 2)
         bic = p * np.log(n) - 2 * log_l
 
         l_list.append(log_l)
@@ -62,7 +68,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
     B = np.array(b_list)
 
     best_index = np.argmin(B)
-    best_k = range(kmin, kmax + 1)[best_index]
+    best_k = kmin + best_index
     best_result = results[best_index]
 
     return best_k, best_result, L, B
