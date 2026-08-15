@@ -30,5 +30,7 @@ def maximization(X, g):
         m[i] = np.dot(g[i], X) / sum_g
         diff = X - m[i]
         S[i] = np.dot(g[i] * diff.T, diff) / sum_g
+        # Add small regularization to prevent singular covariance matrices
+        S[i] += np.identity(d) * 1e-6
 
     return pi, m, S
