@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Module that calculates intra-cluster variance."""
+\"\"\"Module that calculates intra-cluster variance.\"\"\"
 import numpy as np
 
 
 def variance(X, C):
-    """Calculates total intra-cluster variance."""
+    \"\"\"Calculates total intra-cluster variance.\"\"\"
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None
     if not isinstance(C, np.ndarray) or len(C.shape) != 2:
