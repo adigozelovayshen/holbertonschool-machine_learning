@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module that finds best clusters for GMM using BIC."""
+"""Module that finds best number of clusters for GMM using BIC."""
 import numpy as np
 EM = __import__('8-EM').expectation_maximization
 
