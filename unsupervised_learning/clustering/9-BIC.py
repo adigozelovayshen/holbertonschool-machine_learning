@@ -4,6 +4,7 @@ Module that finds the best number of clusters
 for a GMM using the Bayesian Information Criterion.
 """
 import numpy as np
+
 expectation_maximization = __import__('8-EM').expectation_maximization
 
 
@@ -17,8 +18,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
     if not isinstance(kmin, int) or kmin <= 0:
         return None, None, None, None
     if kmax is not None and (
-        not isinstance(kmax, int) or kmax <= 0
-    ):
+            not isinstance(kmax, int) or kmax <= 0):
         return None, None, None, None
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None, None, None
@@ -28,35 +28,41 @@ def BIC(X, kmin=1, kmax=None, iterations=1000,
         return None, None, None, None
 
     n, d = X.shape
+
     if kmax is None:
         kmax = n
-    if kmin > kmax or kmin > n or kmax > n:
+
+    if kmax < kmin:
+        return None, None, None, None
+
+    if kmin > n or kmax > n:
         return None, None, None, None
 
     results = []
     l_list = []
     b_list = []
-    ks = range(kmin, kmax + 1)
 
-    for k in ks:
+    for k in range(kmin, kmax + 1):
         pi, m, S, g, log_l = expectation_maximization(
             X, k, iterations, tol, verbose
         )
+
         if pi is None:
             return None, None, None, None
 
-        p = (k - 1) + (k * d) + int(k * d * (d + 1) / 2)
+        p = ((k - 1) + (k * d)
+             + int(k * d * (d + 1) / 2))
         bic = p * np.log(n) - 2 * log_l
 
         l_list.append(log_l)
         b_list.append(bic)
         results.append((pi, m, S))
 
-    l = np.array(l_list)
-    b = np.array(b_list)
+    L = np.array(l_list)
+    B = np.array(b_list)
 
-    best_index = np.argmin(b)
-    best_k = ks[best_index]
+    best_index = np.argmin(B)
+    best_k = range(kmin, kmax + 1)[best_index]
     best_result = results[best_index]
 
-    return best_k, best_result, l, b
+    return best_k, best_result, L, B
