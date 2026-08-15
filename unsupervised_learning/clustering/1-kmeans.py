@@ -42,8 +42,8 @@ def kmeans(X, k, iterations=1000):
 
     for _ in range(iterations):
         # Calculate distances between all points and centroids
-        # X: (n, 1, d), C: (1, k, d) -> distance: (n, k)
-        distances = np.sqrt(np.sum((X[:, np.newaxis, :] - C[np.newaxis, :, :]) ** 2, axis=2))
+        diff = X[:, np.newaxis, :] - C[np.newaxis, :, :]
+        distances = np.sqrt(np.sum(diff ** 2, axis=2))
         
         # Assign each point to the closest centroid
         clss = np.argmin(distances, axis=1)
@@ -52,11 +52,15 @@ def kmeans(X, k, iterations=1000):
         C_prev = C.copy()
 
         # Update centroids
-        C = np.array([
-            X[clss == j].mean(axis=0) if np.any(clss == j)
-            else np.random.uniform(np.min(X, axis=0), np.max(X, axis=0))
-            for j in range(k)
-        ])
+        new_C = []
+        for j in range(k):
+            if np.any(clss == j):
+                new_C.append(X[clss == j].mean(axis=0))
+            else:
+                low = np.min(X, axis=0)
+                high = np.max(X, axis=0)
+                new_C.append(np.random.uniform(low, high, size=(d,)))
+        C = np.array(new_C)
 
         # Check if centroids haven't changed
         if np.all(C == C_prev):
