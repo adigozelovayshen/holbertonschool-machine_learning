@@ -40,21 +40,22 @@ def kmeans(X, k, iterations=1000):
     high = np.max(X, axis=0)
 
     for _ in range(iterations):
-        # 1. Assignment step
-        dist = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
-        clss = np.argmin(dist, axis=1)
+        # Calculate distances using broadcasting (ensures stable precision)
+        distances = np.sqrt(np.sum((X[:, np.newaxis, :] - C[np.newaxis, :, :]) ** 2, axis=2))
+        clss = np.argmin(distances, axis=1)
 
         C_prev = C.copy()
 
-        # 2. Update step
+        # Update centroids
+        new_C = []
         for j in range(k):
             members = X[clss == j]
             if len(members) == 0:
-                C[j] = np.random.uniform(low, high, size=(d,))
+                new_C.append(np.random.uniform(low, high, size=(d,)))
             else:
-                C[j] = np.mean(members, axis=0)
+                new_C.append(np.mean(members, axis=0))
+        C = np.array(new_C)
 
-        # Check convergence
         if np.all(C == C_prev):
             break
 
