@@ -25,17 +25,19 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     if kmin > kmax or kmin > n or kmax > n:
         return None, None, None, None
 
-    results, l_list, b_list = [], [], []
+    results = []
+    l_list = []
+    b_list = []
     ks = range(kmin, kmax + 1)
 
     for k in ks:
         pi, m, S, g, log_l = expectation_maximization(
-            X, k, iterations, tol, verbose)
-
+            X, k, iterations, tol, verbose
+        )
         if pi is None:
             return None, None, None, None
 
-        p = (k - 1) + (k * d) + (k * d * (d + 1) / 2)
+        p = (k - 1) + (k * d) + int(k * d * (d + 1) / 2)
         bic = p * np.log(n) - 2 * log_l
 
         l_list.append(log_l)
