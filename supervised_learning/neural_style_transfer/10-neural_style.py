@@ -217,9 +217,9 @@ class NST:
         Calculates the variational cost for the generated image.
         """
         if (not isinstance(generated_image, (tf.Tensor, tf.Variable)) or
-                len(generated_image.shape) != 4):
+                len(generated_image.shape) not in (3, 4)):
             raise TypeError(
-                "generated_image must be a tensor of shape (1, nh, nw, 3)"
+                "image must be a tensor of rank 3 or 4"
             )
 
         return tf.reduce_sum(tf.image.total_variation(generated_image))
@@ -284,7 +284,7 @@ class NST:
                 raise TypeError("step must be an integer")
             if step <= 0 or step >= iterations:
                 raise ValueError(
-                    "iterations must be positive and less than iterations"
+                    "step must be positive and less than iterations"
                 )
         if not isinstance(lr, (int, float)) or isinstance(lr, bool):
             raise TypeError("lr must be a number")
