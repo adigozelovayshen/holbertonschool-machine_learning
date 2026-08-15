@@ -22,21 +22,36 @@ def kmeans(X, k, iterations=1000):
         return None, None
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None
+    
     C = initialize(X, k)
     if C is None:
         return None, None
+    
     low = np.min(X, axis=0)
     high = np.max(X, axis=0)
+    
     for _ in range(iterations):
-        D = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
-        clss = np.argmin(D, axis=1)
+        # Calculate Euclidean distances
+        distances = np.sqrt(np.sum((X[:, np.newaxis, :] - C[np.newaxis, :, :]) ** 2, axis=2))
+        clss = np.argmin(distances, axis=1)
+        
         C_prev = C.copy()
+        
+        new_C = []
         for j in range(k):
             members = X[clss == j]
-            if len(members) == 0:
-                C[j] = np.random.uniform(low, high, size=(X.shape[1],))
+            if members.size == 0:
+                new_C.append(np.random.uniform(low, high, size=(X.shape[1],)))
             else:
-                C[j] = np.mean(members, axis=0)
+                new_C.append(np.mean(members, axis=0))
+        
+        C = np.array(new_C)
+        
         if np.all(C == C_prev):
             break
+            
+    # Re-evaluate final assignments to ensure perfect match with the desired indices order
+    distances = np.sqrt(np.sum((X[:, np.newaxis, :] - C[np.newaxis, :, :]) ** 2, axis=2))
+    clss = np.argmin(distances, axis=1)
+    
     return C, clss
