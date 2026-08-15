@@ -26,13 +26,12 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     n = X.shape[0]
     if kmax is None:
         kmax = n
-    if kmin >= kmax:
+    if kmin > kmax:
         return None, None
 
     results = []
     d_vars = []
 
-    # First loop: iterate through cluster sizes from kmin to kmax
     for k in range(kmin, kmax + 1):
         C, clss = kmeans(X, k, iterations)
         if C is None or clss is None:
