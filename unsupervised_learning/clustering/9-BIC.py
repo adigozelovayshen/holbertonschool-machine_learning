@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Bayesian Information Criterion (BIC) for GMM
+Bayesian Information Criterion (BIC) module
 """
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
@@ -11,32 +11,32 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     Finds the best number of clusters for a GMM using BIC
 
     Parameters:
-    - X: numpy.ndarray of shape (n, d) containing the data set
-    - kmin: positive integer containing minimum number of clusters
-    - kmax: positive integer containing maximum number of clusters
-    - iterations: positive integer containing maximum iterations
-    - tol: non-negative float containing tolerance
-    - verbose: boolean that determines if EM should print info
+    - X: numpy.ndarray of shape (n, d) containing dataset
+    - kmin: positive integer for minimum number of clusters
+    - kmax: positive integer for maximum number of clusters
+    - iterations: positive integer for max iterations of EM
+    - tol: non-negative float containing tolerance for EM
+    - verbose: boolean for printing EM info
 
     Returns:
-    - best_k, best_result, l, b, or None, None, None, None on failure
+    - best_k, best_result, l, b or None, None, None, None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None, None, None
-    if not isinstance(kmin, int) or kmin < 1:
+    if type(kmin) is not int or kmin <= 0:
         return None, None, None, None
 
     n, d = X.shape
 
     if kmax is None:
         kmax = n
-    if not isinstance(kmax, int) or kmax < 1 or kmax < kmin:
+    if type(kmax) is not int or kmax <= 0 or kmin > kmax:
         return None, None, None, None
-    if not isinstance(iterations, int) or iterations < 1:
+    if type(iterations) is not int or iterations <= 0:
         return None, None, None, None
-    if not isinstance(tol, (int, float)) or tol < 0:
+    if type(tol) is not float and type(tol) is not int or tol < 0:
         return None, None, None, None
-    if not isinstance(verbose, bool):
+    if type(verbose) is not bool:
         return None, None, None, None
 
     l = np.zeros(kmax - kmin + 1)
@@ -55,8 +55,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         results.append((pi, m, S))
 
         # p = number of parameters
-        # (k - 1) priors + (k * d) means + k * d * (d + 1) / 2 covariances
-        p = (k - 1) + (k * d) + (k * d * (d + 1) / 2)
+        p = (k * d * (d + 3) / 2) + k - 1
         # BIC = p * ln(n) - 2 * l
         b[idx] = p * np.log(n) - 2 * log_l
 
