@@ -45,8 +45,8 @@ class GaussianProcess:
         Updates a Gaussian Process with a new point
 
         Parameters:
-        - X_new: numpy.ndarray of shape (1,) representing the new sample point
-        - Y_new: numpy.ndarray of shape (1,) representing the new function value
+        - X_new: numpy.ndarray of shape (1,) representing new point
+        - Y_new: numpy.ndarray of shape (1,) representing new value
         """
         self.X = np.vstack((self.X, X_new))
         self.Y = np.vstack((self.Y, Y_new))
