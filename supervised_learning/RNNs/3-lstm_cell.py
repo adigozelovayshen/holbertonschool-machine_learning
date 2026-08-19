@@ -47,19 +47,27 @@ class LSTMCell:
             c_next: next cell state
             y: output of the cell (with softmax activation)
         """
-        # Concatenate previous hidden state and input data: shape (m, h + i)
+        # Concatenate previous hidden state and input data: shape (m, i + h)
         x_concat = np.concatenate((h_prev, x_t), axis=1)
 
         # Gate activations
-        f_t = 1 / (1 + np.exp(-(np.matmul(x_concat, self.Wf) + self.bf)))
-        u_t = 1 / (1 + np.exp(-(np.matmul(x_concat, self.Wu) + self.bu)))
-        c_tilde = np.tanh(np.matmul(x_concat, self.Wc) + self.bc)
+        f_t = 1 / (1 + np.exp(
+            -(np.matmul(x_concat, self.Wf) + self.bf)
+        ))
+        u_t = 1 / (1 + np.exp(
+            -(np.matmul(x_concat, self.Wu) + self.bu)
+        ))
+        c_tilde = np.tanh(
+            np.matmul(x_concat, self.Wc) + self.bc
+        )
 
         # Cell state update
         c_next = f_t * c_prev + u_t * c_tilde
 
         # Output gate and hidden state update
-        o_t = 1 / (1 + np.exp(-(np.matmul(x_concat, self.Wo) + self.bo)))
+        o_t = 1 / (1 + np.exp(
+            -(np.matmul(x_concat, self.Wo) + self.bo)
+        ))
         h_next = o_t * np.tanh(c_next)
 
         # Cell output with softmax activation
