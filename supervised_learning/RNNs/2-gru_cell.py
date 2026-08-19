@@ -21,7 +21,7 @@ class GRUCell:
 
     def forward(self, h_prev, x_t):
         """Forward propagation for one time step"""
-        concat_input = np.concatenate((x_t, h_prev), axis=1)
+        concat_input = np.concatenate((h_prev, x_t), axis=1)
 
         z = 1 / (1 + np.exp(
             -(np.matmul(concat_input, self.Wz) + self.bz)
@@ -31,7 +31,7 @@ class GRUCell:
             -(np.matmul(concat_input, self.Wr) + self.br)
         ))
 
-        concat_reset = np.concatenate((x_t, r * h_prev), axis=1)
+        concat_reset = np.concatenate((r * h_prev, x_t), axis=1)
 
         h_tilde = np.tanh(
             np.matmul(concat_reset, self.Wh) + self.bh
