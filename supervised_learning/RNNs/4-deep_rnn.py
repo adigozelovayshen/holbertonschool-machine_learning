@@ -12,7 +12,8 @@ def deep_rnn(rnn_cells, X, h_0):
     Parameters:
         rnn_cells: list of RNNCell instances of length l
         X: numpy.ndarray of shape (t, m, i) with input data
-        h_0: numpy.ndarray of shape (l, m, h) with initial hidden state
+        h_0: numpy.ndarray of shape (l, m, h) with initial
+             hidden state
 
     Returns:
         H: numpy.ndarray containing all hidden states
