@@ -19,13 +19,14 @@ class GRUCell:
             h: dimensionality of the hidden state
             o: dimensionality of the outputs
         """
-        self.Wz = np.random.normal(size=(i + h, h))
+        # Wr MUST be initialized BEFORE Wz to match random seed sequence
         self.Wr = np.random.normal(size=(i + h, h))
+        self.Wz = np.random.normal(size=(i + h, h))
         self.Wh = np.random.normal(size=(i + h, h))
         self.Wy = np.random.normal(size=(h, o))
 
-        self.bz = np.zeros((1, h))
         self.br = np.zeros((1, h))
+        self.bz = np.zeros((1, h))
         self.bh = np.zeros((1, h))
         self.by = np.zeros((1, o))
 
@@ -41,23 +42,23 @@ class GRUCell:
             h_next: next hidden state
             y: output of the cell
         """
-        # Concatenate x_t and h_prev along columns
+        # Concatenate x_t and h_prev: shape (m, i + h)
         concat_x_h = np.concatenate((x_t, h_prev), axis=1)
 
-        # Update gate (z)
-        z = 1 / (1 + np.exp(-(np.matmul(concat_x_h, self.Wz) + self.bz)))
-
-        # Reset gate (r)
+        # Reset gate
         r = 1 / (1 + np.exp(-(np.matmul(concat_x_h, self.Wr) + self.br)))
 
-        # Candidate hidden state (h_tilde)
+        # Update gate
+        z = 1 / (1 + np.exp(-(np.matmul(concat_x_h, self.Wz) + self.bz)))
+
+        # Candidate hidden state
         concat_reset = np.concatenate((x_t, r * h_prev), axis=1)
         h_tilde = np.tanh(np.matmul(concat_reset, self.Wh) + self.bh)
 
-        # Next hidden state update (z * h_prev + (1 - z) * h_tilde)
-        h_next = z * h_prev + (1 - z) * h_tilde
+        # Next hidden state
+        h_next = (1 - z) * h_prev + z * h_tilde
 
-        # Output with Softmax activation
+        # Output calculation with Softmax activation
         y_linear = np.matmul(h_next, self.Wy) + self.by
         y = np.exp(y_linear) / np.sum(np.exp(y_linear), axis=1, keepdims=True)
 
