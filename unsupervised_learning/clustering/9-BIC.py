@@ -9,17 +9,6 @@ expectation_maximization = __import__('8-EM').expectation_maximization
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     """
     Finds the best number of clusters for a GMM using BIC
-
-    Parameters:
-    - X: numpy.ndarray of shape (n, d) containing dataset
-    - kmin: positive integer for minimum number of clusters
-    - kmax: positive integer for maximum number of clusters
-    - iterations: positive integer for max iterations of EM
-    - tol: non-negative float containing tolerance for EM
-    - verbose: boolean for printing EM info
-
-    Returns:
-    - best_k, best_result, l, b or None, None, None, None on failure
     """
     if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None, None, None
@@ -54,6 +43,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         l[idx] = log_l
         results.append((pi, m, S))
 
+        # p = number of parameters
         p = (k * d * (d + 3) / 2) + k - 1
         b[idx] = p * np.log(n) - 2 * log_l
 
