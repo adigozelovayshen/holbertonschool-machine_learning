@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Bayesian Information Criterion (BIC) module
+Bayesian Information Criterion (BIC) for GMM
 """
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
@@ -21,22 +21,22 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     Returns:
     - best_k, best_result, l, b, or None, None, None, None on failure
     """
-    if type(X) is not np.ndarray or len(X.shape) != 2:
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None
-    if type(kmin) is not int or kmin <= 0:
+    if not isinstance(kmin, int) or kmin < 1:
         return None, None, None, None
 
     n, d = X.shape
 
     if kmax is None:
         kmax = n
-    if type(kmax) is not int or kmax <= 0 or kmin > kmax:
+    if not isinstance(kmax, int) or kmax < 1 or kmax < kmin:
         return None, None, None, None
-    if type(iterations) is not int or iterations <= 0:
+    if not isinstance(iterations, int) or iterations < 1:
         return None, None, None, None
-    if type(tol) is not float or tol < 0:
+    if not isinstance(tol, (int, float)) or tol < 0:
         return None, None, None, None
-    if type(verbose) is not bool:
+    if not isinstance(verbose, bool):
         return None, None, None, None
 
     l = np.zeros(kmax - kmin + 1)
@@ -55,6 +55,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         results.append((pi, m, S))
 
         # p = number of parameters
+        # (k - 1) priors + (k * d) means + k * d * (d + 1) / 2 covariances
         p = (k - 1) + (k * d) + (k * d * (d + 1) / 2)
         # BIC = p * ln(n) - 2 * l
         b[idx] = p * np.log(n) - 2 * log_l
