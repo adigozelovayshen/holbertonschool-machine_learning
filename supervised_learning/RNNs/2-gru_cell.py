@@ -41,21 +41,21 @@ class GRUCell:
             h_next: next hidden state
             y: output of the cell
         """
-        # Concatenate x_t and h_prev: shape (m, i + h)
+        # Concatenate x_t and h_prev along columns
         concat_x_h = np.concatenate((x_t, h_prev), axis=1)
 
-        # Update gate
+        # Update gate (z)
         z = 1 / (1 + np.exp(-(np.matmul(concat_x_h, self.Wz) + self.bz)))
 
-        # Reset gate
+        # Reset gate (r)
         r = 1 / (1 + np.exp(-(np.matmul(concat_x_h, self.Wr) + self.br)))
 
-        # Candidate hidden state: apply reset gate to h_prev before concat
+        # Candidate hidden state (h_tilde)
         concat_reset = np.concatenate((x_t, r * h_prev), axis=1)
         h_tilde = np.tanh(np.matmul(concat_reset, self.Wh) + self.bh)
 
-        # Next hidden state calculation
-        h_next = (1 - z) * h_prev + z * h_tilde
+        # Next hidden state update (z * h_prev + (1 - z) * h_tilde)
+        h_next = z * h_prev + (1 - z) * h_tilde
 
         # Output with Softmax activation
         y_linear = np.matmul(h_next, self.Wy) + self.by
