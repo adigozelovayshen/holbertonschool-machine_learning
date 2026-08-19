@@ -5,12 +5,10 @@ import numpy as np
 
 
 class GRUCell:
-    """Gated Recurrent Unit (GRU) hüceyrəsini təmsil edən sinif"""
+    """Gated Recurrent Unit (GRU) hucresini temsil eden sinif"""
 
     def __init__(self, i, h, o):
-        """
-        İnisializasiya funksiyası
-        """
+        """Initialize GRUCell"""
         self.Wz = np.random.normal(size=(i + h, h))
         self.Wr = np.random.normal(size=(i + h, h))
         self.Wh = np.random.normal(size=(i + h, h))
@@ -22,20 +20,31 @@ class GRUCell:
         self.by = np.zeros((1, o))
 
     def forward(self, h_prev, x_t):
-        """
-        İrəli ötürmə (Forward Pass) hesablama funksiyası
-        """
+        """Forward propagation for one time step"""
         concat_input = np.concatenate((x_t, h_prev), axis=1)
 
-        z = 1 / (1 + np.exp(-(np.matmul(concat_input, self.Wz) + self.bz)))
-        r = 1 / (1 + np.exp(-(np.matmul(concat_input, self.Wr) + self.br)))
+        z = 1 / (1 + np.exp(
+            -(np.matmul(concat_input, self.Wz) + self.bz)
+        ))
+
+        r = 1 / (1 + np.exp(
+            -(np.matmul(concat_input, self.Wr) + self.br)
+        ))
 
         concat_reset = np.concatenate((x_t, r * h_prev), axis=1)
-        h_tilde = np.tanh(np.matmul(concat_reset, self.Wh) + self.bh)
+
+        h_tilde = np.tanh(
+            np.matmul(concat_reset, self.Wh) + self.bh
+        )
 
         h_next = (1 - z) * h_prev + z * h_tilde
 
         y_linear = np.matmul(h_next, self.Wy) + self.by
-        y = np.exp(y_linear) / np.sum(np.exp(y_linear), axis=1, keepdims=True)
+
+        y = np.exp(y_linear) / np.sum(
+            np.exp(y_linear),
+            axis=1,
+            keepdims=True
+        )
 
         return h_next, y
