@@ -54,9 +54,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         l[idx] = log_l
         results.append((pi, m, S))
 
-        # p = number of parameters
         p = (k * d * (d + 3) / 2) + k - 1
-        # BIC = p * ln(n) - 2 * l
         b[idx] = p * np.log(n) - 2 * log_l
 
     best_idx = np.argmin(b)
