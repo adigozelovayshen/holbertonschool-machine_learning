@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Expectation Maximization for GMM module
+Expectation Maximization module
 """
 import numpy as np
 initialize = __import__('4-initialize').initialize
@@ -8,19 +8,10 @@ expectation = __import__('6-expectation').expectation
 maximization = __import__('7-maximization').maximization
 
 
-def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
+def expectation_maximization(X, k, iterations=1000,
+                             tol=1e-5, verbose=False):
     """
     Performs expectation maximization for a GMM
-
-    Parameters:
-    - X: numpy.ndarray of shape (n, d) containing dataset
-    - k: positive integer for number of clusters
-    - iterations: positive integer for max iterations
-    - tol: non-negative float containing tolerance
-    - verbose: boolean for printing info
-
-    Returns:
-    - pi, m, S, g, l or None, None, None, None, None on failure
     """
     if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None, None, None, None

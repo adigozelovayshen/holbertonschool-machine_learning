@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Bayesian Information Criterion (BIC) module
+Bayesian Information Criterion module
 """
 import numpy as np
 expectation_maximization = __import__('8-EM').expectation_maximization
 
 
-def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
+def BIC(X, kmin=1, kmax=None, iterations=1000,
+        tol=1e-5, verbose=False):
     """
-    Finds the best number of clusters for a GMM using BIC
+    Finds best number of clusters for GMM using BIC
     """
     if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None, None, None
@@ -43,7 +44,6 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         l[idx] = log_l
         results.append((pi, m, S))
 
-        # p = number of parameters
         p = (k * d * (d + 3) / 2) + k - 1
         b[idx] = p * np.log(n) - 2 * log_l
 
