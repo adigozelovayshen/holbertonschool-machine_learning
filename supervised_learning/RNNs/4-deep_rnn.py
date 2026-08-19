@@ -26,7 +26,7 @@ def deep_rnn(rnn_cells, X, h_0):
     H = np.zeros((t + 1, l, m, h))
     H[0] = h_0
 
-    # Initialize Y with shape (t, m, o) where o is output dimension of last cell
+    # Initialize Y with shape (t, m, o)
     o = rnn_cells[-1].by.shape[1]
     Y = np.zeros((t, m, o))
 
@@ -45,7 +45,7 @@ def deep_rnn(rnn_cells, X, h_0):
             # Update hidden state for current step and layer
             H[step + 1, layer] = h_next
 
-            # The output of current layer becomes input to the next layer
+            # Output of current layer becomes input to the next layer
             x_t = h_next
 
         # Save output of the last layer
