@@ -19,7 +19,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     - decoder: the decoder model
     - auto: the full autoencoder model
     """
-    # Sampling function for reparameterization trick
+    # Sampling layer
     def sampling(args):
         """Samples latent vector z using mu and log_sig"""
         mu, log_sig = args
@@ -52,21 +52,21 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     decoder = keras.Model(latent_inputs, decoded_output, name='decoder')
 
     # Full VAE Autoencoder
-    auto_output = decoder(encoder(inputs)[0])
-    auto = keras.Model(inputs, auto_output, name='autoencoder')
+    outputs = decoder(encoder(inputs)[0])
+    auto = keras.Model(inputs, outputs, name='autoencoder')
 
-    # Custom VAE Loss
-    def vae_loss(x, x_decoded_mean):
-        """Calculates combined Reconstruction + KL Loss"""
-        recon_loss = keras.losses.binary_crossentropy(x, x_decoded_mean)
-        recon_loss *= input_dims
-        kl_loss = -0.5 * keras.backend.sum(
-            1 + z_log_sigma - keras.backend.square(z_mean) -
-            keras.backend.exp(z_log_sigma),
-            axis=-1
-        )
-        return keras.backend.mean(recon_loss + kl_loss)
+    # Calculate VAE loss components
+    reconstruction_loss = keras.losses.binary_crossentropy(
+        inputs, outputs
+    )
+    reconstruction_loss *= input_dims
+    kl_loss = 1 + z_log_sigma - keras.backend.square(z_mean) - \
+        keras.backend.exp(z_log_sigma)
+    kl_loss = keras.backend.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = keras.backend.mean(reconstruction_loss + kl_loss)
 
-    auto.compile(optimizer='adam', loss=vae_loss)
+    auto.add_loss(vae_loss)
+    auto.compile(optimizer='adam')
 
     return encoder, decoder, auto
