@@ -6,7 +6,6 @@ import numpy as np
 
 def create_dataset(data, window_size=24, batch_size=64):
     """ Creates a tf.data.Dataset for sequence prediction """
-    # Close qiyməti target olaraq (sütun indeksi 3) götürülür
     X, y = [], []
     for i in range(len(data) - window_size):
         X.append(data[i:i + window_size])
@@ -34,9 +33,13 @@ def build_and_train_model():
     train_ds = create_dataset(train_data)
     val_ds = create_dataset(val_data)
     
-    # Keras Model Arxitekturası
+    # Features (sütun) sayını təyin edirik
+    n_features = data.shape[1]
+    
+    # Keras 3 uyğun Model Arxitekturası
     model = tf.keras.models.Sequential([
-        tf.keras.layers.LSTM(64, return_sequences=True, input_shape=(24, data.shape[1])),
+        tf.keras.layers.Input(shape=(24, n_features)),
+        tf.keras.layers.LSTM(64, return_sequences=True),
         tf.keras.layers.Dropout(0.2),
         tf.keras.layers.LSTM(32),
         tf.keras.layers.Dropout(0.2),
@@ -49,8 +52,8 @@ def build_and_train_model():
     
     # Təlim
     model.fit(train_ds, validation_data=val_ds, epochs=10)
-    model.save('btc_forecast_model.h5')
-    print("Model training complete and saved as btc_forecast_model.h5")
+    model.save('btc_forecast_model.keras')
+    print("Model training complete and saved as btc_forecast_model.keras")
 
 if __name__ == '__main__':
     build_and_train_model()
