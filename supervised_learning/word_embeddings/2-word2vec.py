@@ -6,7 +6,7 @@ import gensim
 
 
 def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
-                   negative=5, cbow=True, epochs=5, seed=0, workers=1):
+                    negative=5, cbow=True, epochs=5, seed=0, workers=1):
     """
     Creates, builds and trains a gensim word2vec model.
 
@@ -16,7 +16,7 @@ def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
         min_count: minimum number of occurrences of a word
         window: maximum distance between current and predicted word
         negative: size of negative sampling
-        cbow: boolean to determine training type
+        cbow: boolean to determine training type (True=CBOW, False=SG)
         epochs: number of iterations to train over
         seed: seed for random number generator
         workers: number of worker threads to train the model
@@ -27,19 +27,14 @@ def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
     sg = 0 if cbow else 1
 
     model = gensim.models.Word2Vec(
+        sentences=sentences,
         vector_size=vector_size,
         min_count=min_count,
         window=window,
         negative=negative,
         sg=sg,
         seed=seed,
-        workers=workers
-    )
-
-    model.build_vocab(sentences)
-    model.train(
-        sentences,
-        total_examples=model.corpus_count,
+        workers=workers,
         epochs=epochs
     )
 
