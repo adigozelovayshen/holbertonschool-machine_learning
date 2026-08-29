@@ -14,11 +14,10 @@ def bag_of_words(sentences, vocab=None):
 
     Returns:
         embeddings: numpy.ndarray of shape (s, f) containing the embeddings
-        features: list of features used for embeddings
+        features: numpy.ndarray of shape (f,) containing features used
     """
     cleaned_sentences = []
     for sentence in sentences:
-        # Durğu işarələrini təmizləyib kiçik hərflərə çeviririk
         text = re.sub(r'\'s\b', '', sentence)
         text = re.sub(r'[^\w\s]', '', text).lower()
         words = text.split()
@@ -42,4 +41,4 @@ def bag_of_words(sentences, vocab=None):
                 j = features.index(word)
                 embeddings[i, j] += 1
 
-    return embeddings, features
+    return embeddings, np.array(features)
