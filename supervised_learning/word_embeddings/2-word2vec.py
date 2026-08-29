@@ -2,11 +2,22 @@
 """
 Word2Vec model module
 """
-import gensim
+import os
+import sys
+
+# Ensure deterministic hashing BEFORE gensim/numpy are imported.
+# PYTHONHASHSEED only takes effect at interpreter startup, so if it
+# isn't already set to "0" we re-exec this same process with it set.
+if os.environ.get("PYTHONHASHSEED") != "0":
+    os.environ["PYTHONHASHSEED"] = "0"
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+import gensim  # noqa: E402
 
 
-def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
-                    negative=5, cbow=True, epochs=5, seed=0, workers=1):
+def word2vec_model(
+        sentences, vector_size=100, min_count=5, window=5,
+        negative=5, cbow=True, epochs=5, seed=0, workers=1):
     """
     Creates, builds and trains a gensim word2vec model.
 
