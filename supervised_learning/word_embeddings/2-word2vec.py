@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Word2Vec model training module
+Word2Vec model module
 """
 import gensim
 
@@ -16,7 +16,7 @@ def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
         min_count: minimum number of occurrences of a word
         window: maximum distance between current and predicted word
         negative: size of negative sampling
-        cbow: boolean to determine training type (True for CBOW, False for SG)
+        cbow: boolean to determine training type
         epochs: number of iterations to train over
         seed: seed for random number generator
         workers: number of worker threads to train the model
@@ -26,16 +26,29 @@ def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
     """
     sg = 0 if cbow else 1
 
-    model = gensim.models.Word2Vec(
-        sentences=sentences,
-        vector_size=vector_size,
-        min_count=min_count,
-        window=window,
-        negative=negative,
-        sg=sg,
-        epochs=epochs,
-        seed=seed,
-        workers=workers
-    )
+    try:
+        model = gensim.models.Word2Vec(
+            sentences=sentences,
+            vector_size=vector_size,
+            min_count=min_count,
+            window=window,
+            negative=negative,
+            sg=sg,
+            epochs=epochs,
+            seed=seed,
+            workers=workers
+        )
+    except TypeError:
+        model = gensim.models.Word2Vec(
+            sentences=sentences,
+            size=vector_size,
+            min_count=min_count,
+            window=window,
+            negative=negative,
+            sg=sg,
+            iter=epochs,
+            seed=seed,
+            workers=workers
+        )
 
     return model
