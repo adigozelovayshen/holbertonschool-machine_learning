@@ -18,16 +18,17 @@ def bag_of_words(sentences, vocab=None):
     """
     cleaned_sentences = []
     for sentence in sentences:
+        # Durğu işarələrini təmizləyib kiçik hərflərə çeviririk
         text = re.sub(r'\'s\b', '', sentence)
         text = re.sub(r'[^\w\s]', '', text).lower()
         words = text.split()
         cleaned_sentences.append(words)
 
     if vocab is None:
-        features = set()
+        features_set = set()
         for words in cleaned_sentences:
-            features.update(words)
-        features = sorted(list(features))
+            features_set.update(words)
+        features = sorted(list(features_set))
     else:
         features = list(vocab)
 
