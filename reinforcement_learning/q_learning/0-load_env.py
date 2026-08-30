@@ -6,17 +6,16 @@ import gymnasium as gym
 
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False,
-                     render_mode=None):
+                     render_mode="ansi"):
     """
     Loads the pre-made FrozenLakeEnv environment from gymnasium.
     """
     kwargs = {
         'desc': desc,
         'map_name': map_name,
-        'is_slippery': is_slippery
+        'is_slippery': is_slippery,
+        'render_mode': render_mode
     }
-    if render_mode is not None:
-        kwargs['render_mode'] = render_mode
 
     env = gym.make('FrozenLake-v1', **kwargs)
     return env
