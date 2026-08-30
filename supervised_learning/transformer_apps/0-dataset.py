@@ -2,6 +2,7 @@
 """
 Dataset class for Machine Translation
 """
+import tokenizers
 import transformers
 from setup import load_pt2en
 
@@ -53,13 +54,22 @@ class Dataset:
             for _, en in data:
                 yield en.numpy().decode('utf-8')
 
-        tokenizer_pt = tokenizer_pt.train_new_from_iterator(
-            pt_generator(),
-            vocab_size=2**13
+        trainer_pt = tokenizers.trainers.WordPieceTrainer(
+            vocab_size=2**13,
+            special_tokens=["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"]
         )
-        tokenizer_en = tokenizer_en.train_new_from_iterator(
+        trainer_en = tokenizers.trainers.WordPieceTrainer(
+            vocab_size=2**13,
+            special_tokens=["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"]
+        )
+
+        tokenizer_pt._tokenizer.train_from_iterator(
+            pt_generator(),
+            trainer=trainer_pt
+        )
+        tokenizer_en._tokenizer.train_from_iterator(
             en_generator(),
-            vocab_size=2**13
+            trainer=trainer_en
         )
 
         return tokenizer_pt, tokenizer_en
