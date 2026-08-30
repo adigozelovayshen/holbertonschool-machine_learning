@@ -41,6 +41,6 @@ def policy_gradient(state, weight):
 
     dsoftmax = probs.copy()
     dsoftmax[0, action] -= 1
-    grad = np.dot(state.T, dsoftmax)
+    grad = np.dot(state.T, -dsoftmax)
 
     return action, grad
