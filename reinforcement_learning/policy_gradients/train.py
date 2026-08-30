@@ -6,15 +6,16 @@ import numpy as np
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
-def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
+def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
     """
-    Implements a full training with Policy Gradient.
+    Implements a full training with Policy Gradient and optional rendering.
 
     Parameters:
     - env: initial environment
     - nb_episodes: number of episodes used for training
     - alpha: the learning rate
     - gamma: the discount factor
+    - show_result: boolean, if True renders the environment every 1000 episodes
 
     Returns:
     - scores: list of all score values for each episode
@@ -29,12 +30,14 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
         state = res[0] if isinstance(res, tuple) else res
         state = state.reshape(1, -1)
 
-        episode_states = []
         episode_gradients = []
         episode_rewards = []
 
         done = False
         while not done:
+            if show_result and episode % 1000 == 0:
+                env.render()
+
             action, grad = policy_gradient(state, weights)
             step_res = env.step(action)
 
@@ -44,7 +47,6 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
             else:
                 next_state, reward, done, _ = step_res
 
-            episode_states.append(state)
             episode_gradients.append(grad)
             episode_rewards.append(reward)
 
@@ -56,7 +58,6 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
         print("Episode: {} Score: {}".format(episode, score), end="\r",
               flush=True)
 
-        # Policy Gradient çəki yenilənməsi (REINFORCE)
         for t in range(len(episode_rewards)):
             G = sum([r * (gamma ** i)
                      for i, r in enumerate(episode_rewards[t:])])
