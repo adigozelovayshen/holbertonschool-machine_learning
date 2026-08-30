@@ -2,7 +2,6 @@
 """
 Dataset class for Machine Translation
 """
-import tokenizers
 import transformers
 from setup import load_pt2en
 
@@ -34,42 +33,25 @@ class Dataset:
             tokenizer_pt: Portuguese tokenizer
             tokenizer_en: English tokenizer
         """
-        pt_pretrained = 'neuralmind/bert-base-portuguese-cased'
-        en_pretrained = 'bert-base-uncased'
-
         tokenizer_pt = transformers.AutoTokenizer.from_pretrained(
-            pt_pretrained,
+            'neuralmind/bert-base-portuguese-cased',
             use_fast=True
         )
         tokenizer_en = transformers.AutoTokenizer.from_pretrained(
-            en_pretrained,
+            'bert-base-uncased',
             use_fast=True
         )
 
-        def pt_generator():
-            for pt, _ in data:
-                yield pt.numpy().decode('utf-8')
+        pt_data = (pt.numpy().decode('utf-8') for pt, _ in data)
+        en_data = (en.numpy().decode('utf-8') for _, en in data)
 
-        def en_generator():
-            for _, en in data:
-                yield en.numpy().decode('utf-8')
-
-        trainer_pt = tokenizers.trainers.WordPieceTrainer(
-            vocab_size=2**13,
-            special_tokens=["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"]
+        tokenizer_pt = tokenizer_pt.train_new_from_iterator(
+            pt_data,
+            vocab_size=2**13
         )
-        trainer_en = tokenizers.trainers.WordPieceTrainer(
-            vocab_size=2**13,
-            special_tokens=["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]"]
-        )
-
-        tokenizer_pt._tokenizer.train_from_iterator(
-            pt_generator(),
-            trainer=trainer_pt
-        )
-        tokenizer_en._tokenizer.train_from_iterator(
-            en_generator(),
-            trainer=trainer_en
+        tokenizer_en = tokenizer_en.train_new_from_iterator(
+            en_data,
+            vocab_size=2**13
         )
 
         return tokenizer_pt, tokenizer_en
