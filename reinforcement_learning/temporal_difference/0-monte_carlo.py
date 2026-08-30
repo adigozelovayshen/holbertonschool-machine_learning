@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module to perform Monte Carlo algorithm for value estimation
+Module to perform Monte Carlo value estimation
 """
 import numpy as np
 
@@ -36,9 +36,6 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
                 next_state, reward, done, info = step_res
                 truncated = False
 
-            if done and reward == 0:
-                reward = -1
-
             episode_data.append((state, reward))
 
             if done or truncated:
@@ -46,14 +43,14 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
 
             state = next_state
 
-        episode_data = np.array(episode_data, dtype=object)
         G = 0
+        episode_states = [x[0] for x in episode_data]
 
         for i in range(len(episode_data) - 1, -1, -1):
             s, r = episode_data[i]
             G = gamma * G + r
 
-            if s not in episode_data[:i, 0]:
+            if s not in episode_states[:i]:
                 V[s] = V[s] + alpha * (G - V[s])
 
     return V
