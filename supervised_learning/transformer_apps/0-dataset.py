@@ -42,28 +42,24 @@ class Dataset:
             use_fast=True
         )
 
-        # Məlumatları tək bir dəfə oxuyub Pythonda list-ə yığırıq
-        pt_texts = []
-        en_texts = []
-        for pt, en in data:
-            pt_texts.append(pt.numpy().decode('utf-8'))
-            en_texts.append(en.numpy().decode('utf-8'))
+        def pt_generator():
+            """Yields Portuguese text in batches"""
+            for pt_batch, _ in data.batch(1000):
+                for pt in pt_batch:
+                    yield pt.numpy().decode('utf-8')
 
-        # Təkrar istifadə oluna bilən generator yaratmaq üçün
-        def get_pt():
-            for text in pt_texts:
-                yield text
-
-        def get_en():
-            for text in en_texts:
-                yield text
+        def en_generator():
+            """Yields English text in batches"""
+            for _, en_batch in data.batch(1000):
+                for en in en_batch:
+                    yield en.numpy().decode('utf-8')
 
         tokenizer_pt = tokenizer_pt.train_new_from_iterator(
-            get_pt(),
+            pt_generator(),
             vocab_size=2**13
         )
         tokenizer_en = tokenizer_en.train_new_from_iterator(
-            get_en(),
+            en_generator(),
             vocab_size=2**13
         )
 
