@@ -42,15 +42,15 @@ class Dataset:
             use_fast=True
         )
 
-        pt_data = (pt.numpy().decode('utf-8') for pt, _ in data)
-        en_data = (en.numpy().decode('utf-8') for _, en in data)
+        pt_list = [pt.numpy().decode('utf-8') for pt, _ in data]
+        en_list = [en.numpy().decode('utf-8') for _, en in data]
 
         tokenizer_pt = tokenizer_pt.train_new_from_iterator(
-            pt_data,
+            pt_list,
             vocab_size=2**13
         )
         tokenizer_en = tokenizer_en.train_new_from_iterator(
-            en_data,
+            en_list,
             vocab_size=2**13
         )
 
