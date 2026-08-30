@@ -9,9 +9,8 @@ def play(env, Q, max_steps=100):
     """
     Has the trained agent play an episode.
     """
-    env.unwrapped.render_mode = "ansi"
-    reset_res = env.reset()
-    state = reset_res[0] if isinstance(reset_res, tuple) else reset_res
+    res = env.reset()
+    state = res[0] if isinstance(res, tuple) else res
 
     rendered_outputs = [env.render()]
     total_rewards = 0
