@@ -8,16 +8,8 @@ import numpy as np
 def play(env, Q, max_steps=100):
     """
     Has the trained agent play an episode.
-
-    Parameters:
-    - env: FrozenLakeEnv instance
-    - Q: numpy.ndarray containing the Q-table
-    - max_steps: maximum number of steps in the episode
-
-    Returns:
-    - total_rewards: total rewards earned during the episode
-    - rendered_outputs: list of rendered outputs representing board
     """
+    env.unwrapped.render_mode = "ansi"
     reset_res = env.reset()
     state = reset_res[0] if isinstance(reset_res, tuple) else reset_res
 
