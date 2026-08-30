@@ -11,10 +11,10 @@ class RNNEncoder(tf.keras.layers.Layer):
         """Initializes the RNNEncoder layer.
 
         Args:
-            vocab: integer representing the size of the input vocabulary
-            embedding: integer representing the dimensionality of the embedding vector
-            units: integer representing the number of hidden units in the RNN cell
-            batch: integer representing the batch size
+            vocab: integer representing size of input vocabulary
+            embedding: integer representing vector dimensionality
+            units: integer representing number of hidden units
+            batch: integer representing batch size
         """
         super(RNNEncoder, self).__init__()
         self.batch = batch
@@ -28,10 +28,10 @@ class RNNEncoder(tf.keras.layers.Layer):
         )
 
     def initialize_hidden_state(self):
-        """Initializes the hidden states for the RNN cell to a tensor of zeros.
+        """Initializes hidden states for RNN cell to zeros.
 
         Returns:
-            A tensor of shape (batch, units) containing initialized hidden states.
+            Tensor of shape (batch, units) containing zeros.
         """
         return tf.zeros((self.batch, self.units))
 
@@ -39,12 +39,12 @@ class RNNEncoder(tf.keras.layers.Layer):
         """Passes input tensor through the encoder.
 
         Args:
-            x: tensor of shape (batch, input_seq_len) containing word indices
-            initial: tensor of shape (batch, units) containing initial hidden state
+            x: tensor of shape (batch, input_seq_len)
+            initial: tensor of shape (batch, units)
 
         Returns:
-            outputs: tensor of shape (batch, input_seq_len, units) containing encoder outputs
-            hidden: tensor of shape (batch, units) containing the last hidden state
+            outputs: tensor of shape (batch, input_seq_len, units)
+            hidden: tensor of shape (batch, units)
         """
         x = self.embedding(x)
         outputs, hidden = self.gru(x, initial_state=initial)
