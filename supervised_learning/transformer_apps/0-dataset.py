@@ -42,20 +42,28 @@ class Dataset:
             use_fast=True
         )
 
-        def pt_iterator():
-            for pt, _ in data:
-                yield pt.numpy().decode('utf-8')
+        # Məlumatları tək bir dəfə oxuyub Pythonda list-ə yığırıq
+        pt_texts = []
+        en_texts = []
+        for pt, en in data:
+            pt_texts.append(pt.numpy().decode('utf-8'))
+            en_texts.append(en.numpy().decode('utf-8'))
 
-        def en_iterator():
-            for _, en in data:
-                yield en.numpy().decode('utf-8')
+        # Təkrar istifadə oluna bilən generator yaratmaq üçün
+        def get_pt():
+            for text in pt_texts:
+                yield text
+
+        def get_en():
+            for text in en_texts:
+                yield text
 
         tokenizer_pt = tokenizer_pt.train_new_from_iterator(
-            pt_iterator(),
+            get_pt(),
             vocab_size=2**13
         )
         tokenizer_en = tokenizer_en.train_new_from_iterator(
-            en_iterator(),
+            get_en(),
             vocab_size=2**13
         )
 
